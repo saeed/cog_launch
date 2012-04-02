@@ -57,11 +57,20 @@ LaunchRouter::simple_action(Packet *p_in)
 	//if not start response timer and broadcast lanch request
 	_holded_packet = p_in->uniqueify();
 	//call launchrequester to send REQ
-	if(_routingtable_available)
+	if(_routingtable_available &&  _channel_lock_positive)
 	{
-		_holded_packet.set_dst_ip_anno(/*from calculating the metric*/);
+		
+		_holded_packet.set_dst_ip_anno(choose_bestneighbor().neighbor_ip /*from calculating the metric*/);
 		output(0).push(_holded_packet);
 		//calculate metric, annotate packet with distenation and output packet
+	}
+	else if(_routingtable_available)
+	{
+		
+		RouteEntry best_neighbor = choose_bestneighbor();	
+		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/);
+		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
+	
 	}
 	else
 	{
@@ -74,11 +83,13 @@ void
 LaunchRouter::use_responses()
 {
 	
+	
 	if(_routingtable_available)
 	{
 		//lookup table and calculate the metric to choose next hop
 		//issue lock request
-		_lock_requester.send_lock_request(0/*channel selected*/, /*lock distantion ip*/, /*lock distantion eth*/);
+		RouteEntry best_neighbor = choose_bestneighbor();	
+		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/);
 		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
 	}
 	else
@@ -98,6 +109,9 @@ LaunchRouter::use_lock()
 	if(_channel_lock_positive)
 	{
 		//annotate packet with distenation and output packet
+		_holded_packet.set_dst_ip_anno(choose_bestneighbor().neighbor_ip /*from calculating the metric*/);
+		output(0).push(_holded_packet);
+
 	}
 	else
 	{
