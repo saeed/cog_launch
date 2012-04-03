@@ -1,5 +1,4 @@
 
-
 #include <click/config.h>
 #include <elements/launch/launch.hh>
 #include <elements/launch/launchrequester.hh>
@@ -9,52 +8,39 @@
 
 CLICK_DECLS
 
-LAUNCHRequester::LAUNCHRequester()
+LaunchCtrlRequester::LaunchCtrlRequester()
 {
 }
 
-LAUNCHRequester::~LAUNCHRequester()
+LaunchCtrlRequester::~LaunchCtrlRequester()
 {
 }
 
 int
-LAUNCHRequester::configure(Vector<String> &conf, ErrorHandler *errh)
+LaunchCtrlRequester::configure(Vector<String> &conf, ErrorHandler *errh)
 {
-   
-
   
   return 0;
 }
 
 int
-LAUNCHRequester::initialize(ErrorHandler *)
+LaunchCtrlRequester::initialize(ErrorHandler *)
 {
   return 0;
 }
-/*
-Packet *
-LAUNCHRequester::simple_action(Packet *p_in)
-{
-  int extra = sizeof(_lh);
-  WritablePacket *p = p_in->push(extra);
-  if (!p)
-    return 0;
 
 
-  memcpy(p->data(), &_lh, sizeof(_lh));
- 
-  return p;
-}*/
-
-
+//Function called by LaunchRouter to broadcast control packets to all the neighbors
 
 void
-LAUNCHRequester::send_request()
+LLaunchCtrlRequester::send_request()
 {
+	
 	int tailroom = 0;
 	int packetsize = sizeof(_lh);
-	int headroom = 0; //sizeof(click_ip)+sizeof(click_udp)+sizeof(click_eth);
-
+	int headroom = 0;
+	
+	
 	WritablePacket *packet = Packet::make(headroom,0,packetsize, tailroom);
 	if (packet == 0 )
 		return click_chatter( "cannot make packet!");
