@@ -1,7 +1,6 @@
-
 #include <click/config.h>
 #include <elements/launch/launch.hh>
-#include <elements/launch/launchrequester.hh>
+#include <elements/launch/launchctrlrequester.hh>
 #include <click/args.hh>
 #include <click/error.hh>
 #include <click/glue.hh>
