@@ -26,6 +26,9 @@ class LaunchRouter : public Element { public:
 	void insert_route( const IPAddress &nip,uint32_t nlat, uint32_t nlong,const EtherAddress &ne,uint8_t chl, uint32_t pub, uint32_t swt);
 	double calculate_metric(RouteEntry r);
 	RouteEntry choose_bestneighbor();
+	
+	void set_channel_loc_positive();
+
 
 
 private:
