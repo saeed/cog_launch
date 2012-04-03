@@ -1,6 +1,6 @@
 #include <click/config.h>
 #include <elements/local/launch.hh>
-#include <elements/local/launchrcvrlock.hh>
+#include <elements/local/launchlockresponder.hh>
 #include <click/args.hh>
 #include <clicknet/ether.h>
 #include <click/error.hh>
@@ -9,17 +9,17 @@
 CLICK_DECLS
 
 
-LaunchCtrlResponder::LaunchCtrlResponder()
+LaunchLockResponder::LaunchLockResponder()
 : timer(this)
 {
 }
 
-LaunchCtrlResponder::~LaunchCtrlResponder()
+LaunchLockResponder::~LaunchLockResponder()
 {
 }
 
 int
-LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
+LaunchLockResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
       .read_mp("DEVNAME", _ifname)
@@ -38,10 +38,15 @@ LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 
 
 Packet *
-LaunchCtrlResponder::simple_action(Packet *p_in)
+LaunchLockResponder::simple_action(Packet *p_in)
 {
 	WritablePacket *p = p_in->uniqueify();
 	struct launch_ctrl_hdr * lauch_hdr_ptr = (grid_hdr *) (p->data());
+	
+	
+	//Need to be modified 
+	//Don't understand it
+	
 	if((_lock_count > 0 && lauch_hdr_ptr->channel == _locked_channel)||_lock_count)
 	{
 		_locked_channel = lauch_hdr_ptr->channel;
@@ -75,7 +80,7 @@ LaunchCtrlResponder::simple_action(Packet *p_in)
 
 
 void
-run_timer(Timer * t)
+LaunchLockResponder::run_timer(Timer * t)
 {
 	if(_lock_count > 0)
 	{
