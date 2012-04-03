@@ -1,5 +1,5 @@
-#ifndef LAUNCH_RCVR_LOCK_HH
-#define LAUNCH_RCVR_LOCK_HH
+#ifndef LAUNCHLOCKRESPONDER_HH
+#define LAUNCHLOCKRESPONDER_HH
 #include <click/element.hh>
 #include <click/glue.hh>
 #include <click/ipaddress.hh>
@@ -9,12 +9,12 @@
 #include <click/confparse.hh>
 CLICK_DECLS
 
-class LaunchRcvrLock : public Element { public:
+class LaunchLockResponder : public Element { public:
 
-	LaunchRcvrLock();
-	~LaunchRcvrLock();
+	LaunchLockResponder();
+	~LaunchLockResponder();
 
-	const char *class_name() const		{ return "LaunchRcvrLock"; }
+	const char *class_name() const		{ return "LaunchLockResponder"; }
 	const char *port_count() const		{ return PORTS_1_1; }
 	const char *processing() const		{ return AGNOSTIC; }
 	
@@ -24,13 +24,19 @@ class LaunchRcvrLock : public Element { public:
 	Packet *simple_action(Packet *);
 
 	private:
-
+//What is this???
 	String _ifname;
+//Channel locked 	
 	uint8_t _locked_channel;
+//Lock counter	
 	uint8_t _lock_count;
+//channel will be locked for time = _loc_timeout_ms in millisecond	
 	uint32_t _lock_timeout_ms;
+//Timer of the lock	
 	Timer _lock_timeout_timer;
 
+
+//PU behavior of the three candidates channels
 	uint32_t _pu_behavior0;
 	uint32_t _pu_behavior1;
 	uint32_t _pu_behavior2;
