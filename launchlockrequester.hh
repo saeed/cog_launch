@@ -1,5 +1,5 @@
-#ifndef CLICK_LAUNCHREQUESTER_HH
-#define CLICK_LAUNCHREQUESTER_HH
+#ifndef CLICK_LAUNCHLOCREQUESTER_HH
+#define CLICK_LAUNCHLOCREQUESTER_HH
 #include <click/element.hh>
 #include <click/glue.hh>
 #include <elements/launch/launch.hh>
@@ -8,16 +8,16 @@ CLICK_DECLS
 /*
  * =c
  *
- * launchrequester()
+ * launchlocrequester()
  *
  */
 
-class LAUNCHLockRequester : public Element { public:
+class LaunchLockRequester : public Element { public:
 
-  LAUNCHLockRequester();
-  ~LAUNCHLockRequester();
+  LaunchLockRequester();
+  ~LaunchLockRequester();
 
-  const char *class_name() const		{ return "LAUNCHLockRequester"; }
+  const char *class_name() const		{ return "LaunchLockRequester"; }
   const char *port_count() const		{ return "0/1"; }
   const char *processing() const		{ return PUSH; }
 
@@ -25,7 +25,7 @@ class LAUNCHLockRequester : public Element { public:
   bool can_live_reconfigure() const		{ return true; }
   int initialize(ErrorHandler *);
 
-  //Packet *simple_action(Packet *);
+  
   void send_request();
   
 
