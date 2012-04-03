@@ -12,12 +12,12 @@ CLICK_DECLS
  *
  */
 
-class LAUNCHRequester : public Element { public:
+class LaunchCtrlRequester : public Element { public:
 
-  LAUNCHRequester();
-  ~LAUNCHRequester();
+  LaunchCtrlRequester();
+  ~LaunchCtrlRequester();
 
-  const char *class_name() const		{ return "LAUNCHRequester"; }
+  const char *class_name() const		{ return "LaunchCtrlRequester"; }
   const char *port_count() const		{ return "0/1"; }
   const char *processing() const		{ return PUSH; }
 
@@ -25,7 +25,7 @@ class LAUNCHRequester : public Element { public:
   bool can_live_reconfigure() const		{ return true; }
   int initialize(ErrorHandler *);
 
-  //Packet *simple_action(Packet *);
+//Function called by LaunchRouter to send request to all neighbors(broadcast)
   void send_request();
   
 
