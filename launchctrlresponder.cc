@@ -30,6 +30,8 @@ LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
       .complete() < 0)
       return -1;
 	lch.type =  launch_ctrl_hdr::LAUNCH_RES;
+	//A node responds with the best channel from three candidates 
+	//in terms of PU behaviour(1/(probability of the presence of PU))
 
 	if (_pu_behavior0 >= _pu_behavior1 && _pu_behavior0 >= _pu_behavior2)
 	{
@@ -50,11 +52,6 @@ LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 }
 
 
-//int
-//LaunchCtrlResponder::initialize(ErrorHandler *)
-//{
-//  return 0;
-//}
 
 
 Packet *
