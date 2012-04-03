@@ -1,5 +1,4 @@
 
-
 #include <click/config.h>
 #include <elements/launch/launch.hh>
 #include <elements/launch/launchlockrequester.hh>
@@ -9,50 +8,37 @@
 
 CLICK_DECLS
 
-LAUNCHLockRequester::LAUNCHLockRequester()
+LaunchLockRequester::LaunchLockRequester()
 {
 }
 
-LAUNCHLockRequester::~LAUNCHLockRequester()
+LaunchLockRequester::~LaunchLockRequester()
 {
 }
 
 int
-LAUNCHLockRequester::configure(Vector<String> &conf, ErrorHandler *errh)
+LaunchLockRequester::configure(Vector<String> &conf, ErrorHandler *errh)
 {
    
 	return 0;
 }
 
 int
-LAUNCHLockRequester::initialize(ErrorHandler *)
+LaunchLockRequester::initialize(ErrorHandler *)
 {
 	return 0;
 }
 
-/*Packet *
-LAUNCHLockRequester::simple_action(Packet *p_in)
-{
-	int extra = sizeof(_lh);
-	WritablePacket *p = p_in->push(extra);
-	if (!p)
-		return 0;
 
 
-	memcpy(p->data(), &_lh, sizeof(_lh));
-
-	return p;
-}*/
-
-
-
+// Function called from LaunchRouter to send lock request packets on certain channel to certain neighbor
 void
 LAUNCHLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip,EtherAddress distination_eth )
 {
 	
 	int tailroom = 0;
 	int packetsize = sizeof(_lh);
-	int headroom = 0; //sizeof(click_ip)+sizeof(click_udp)+sizeof(click_eth);
+	int headroom = 0; 
 
 	WritablePacket *packet = Packet::make(headroom,0,packetsize, tailroom);
 	if (packet == 0 )
@@ -61,12 +47,13 @@ LAUNCHLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip
 	memset(packet->data(), 0, packet->length());
 	struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) packet->data();
 	
+	
 	format->type = launch_ctrl_hdr::LAUNCH_LOCK_REQ;
 	format->channel = channel;
 
 	memcpy(packet->data(), &_lh, sizeof(_lh));
 	
-	//annotate packet with distenation for wrapper
+	//annotate packet with distination for wrapper
 	
 	output(0).push(packet);
 }
