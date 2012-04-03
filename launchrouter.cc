@@ -56,7 +56,9 @@ LaunchRouter::simple_action(Packet *p_in)
 	//if exists annotate packet and push to next element
 	//if not start response timer and broadcast lanch request
 	_holded_packet = p_in->uniqueify();
-	//call launchrequester to send REQ
+	//Forward packet if routingtable is available and we have lock 
+	//call launchlocrequester if routingtable is available and we don't have lock
+	//call launchctrlrequester to send REQ
 	if(_routingtable_available &&  _channel_lock_positive)
 	{
 		
@@ -79,6 +81,8 @@ LaunchRouter::simple_action(Packet *p_in)
 	}
 }
 
+// Called by the _respone_waiting_timer when it times out
+// to chech if the routingtable was loaded or not
 void 
 LaunchRouter::use_responses()
 {
@@ -99,7 +103,7 @@ LaunchRouter::use_responses()
 	}
 }
 
-
+// Called by the _lock_waiting_timer when it times out to check if lock was obtained
 void 
 LaunchRouter::use_lock()
 {
@@ -130,6 +134,10 @@ LaunchRouter::make_routetable_expire()
 }
 
 
+
+//Should be called by LaunchCtrlResponseHandler
+
+
 void
 LaunchRouter::insert_route(const IPAddress &nip,
 	      uint32_t nlat, uint32_t nlong, 
@@ -157,7 +165,7 @@ LaunchRouter::insert_route(const IPAddress &nip,
 }
 
 
-
+// Function to pick the best neighbor in terms of the launch metric
 RouteEntry 
 LaunchRouter::choose_bestneighbor()
 {
@@ -178,6 +186,7 @@ LaunchRouter::choose_bestneighbor()
 	return _rtes.findp(best_ip);
 }
 
+//Function to calculate the metric for certain neighbor in the table
 double 
 LaunchRouter::calculate_metric(RouteEntry r)
 {
@@ -189,7 +198,7 @@ LaunchRouter::calculate_metric(RouteEntry r)
 }
 
 
-
+//Function to calculate the distance between two nodes
 double 
 LaunchRouter::distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 	double theta, dist;
