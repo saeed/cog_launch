@@ -6,6 +6,8 @@
 #include <click/etheraddress.hh>
 #include <clicknet/ether.h>
 #include <elements/local/launch.hh>
+#include <elements/local/launchctrlrequester.hh>
+#include <elements/local/launchlockrequester.hh>
 #include <click/confparse.hh>
 CLICK_DECLS
 
@@ -79,8 +81,8 @@ private:
 	void make_routetable_expire();
 	
 
-	LAUNCHRequester *_requester;
-	LAUNCHLockRequester * _lock_requester;
+	LaunchCtrlRequester *_requester;
+	LaunchLockRequester * _lock_requester;
   
 	//Metric Calculation Function
 
