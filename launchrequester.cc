@@ -32,7 +32,7 @@ LaunchCtrlRequester::initialize(ErrorHandler *)
 //Function called by LaunchRouter to broadcast control packets to all the neighbors
 
 void
-LLaunchCtrlRequester::send_request()
+LaunchCtrlRequester::send_request()
 {
 	
 	int tailroom = 0;
