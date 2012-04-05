@@ -30,6 +30,7 @@ class LaunchRouter : public Element { public:
 	RouteEntry choose_bestneighbor();
 	
 	void set_channel_loc_positive();
+	RTable _rtes;
 
 
 
@@ -123,7 +124,6 @@ private:
 	typedef HashMap<IPAddress, RouteEntry> RTable;
 	typedef RTable::const_iterator RTIter;
 
-	RTable _rtes;
 };
 CLICK_ENDDECLS
 #endif
