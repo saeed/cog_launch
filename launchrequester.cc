@@ -57,5 +57,4 @@ LaunchCtrlRequester::send_request()
 
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(LAUNCHRequester)
-
+EXPORT_ELEMENT(LaunchRequester)
