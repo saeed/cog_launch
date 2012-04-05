@@ -1,6 +1,8 @@
 #include <click/config.h>
 #include <elements/local/launch.hh>
 #include <elements/local/launchrouter.hh>
+#include <elements/local/launchctrlrequester.hh>
+#include <elements/local/launchlockrequester.hh>
 #include <click/args.hh>
 #include <clicknet/ether.h>
 #include <click/error.hh>
