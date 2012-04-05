@@ -83,6 +83,9 @@ LaunchRouter::simple_action(Packet *p_in)
 	}
 }
 
+
+
+
 // Called by the _respone_waiting_timer when it times out
 // to chech if the routingtable was loaded or not
 void 
@@ -233,6 +236,12 @@ double
 LaunchRouter::rad2deg(double rad) {
 	return (rad * 180 / pi);
 }
+void 
+LaunchRouter::set_channel_loc_positive(){
+	_channel_loc_positive = true;
+	
+}
+
 
 
 CLICK_ENDDECLS
