@@ -36,7 +36,6 @@ class LaunchRouter : public Element { public:
 
 private:
 	WritablePacket * _holded_packet;
-	IPAddress _dst_ip;
 
 	IPAddress _ip;
 	EtherAddress _eth;

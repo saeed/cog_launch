@@ -122,7 +122,7 @@ LaunchRouter::use_lock()
 	if(_channel_lock_positive)
 	{
 		//annotate packet with distenation and output packet
-		_holded_packet->set_dst_ip_anno(choose_bestneighbor(_dst_ip).neighbor_ip /*from calculating the metric*/);
+		_holded_packet->set_dst_ip_anno(choose_bestneighbor().neighbor_ip /*from calculating the metric*/);
 		output(0).push(_holded_packet);
 
 	}

@@ -50,9 +50,9 @@ LaunchLockResponder::simple_action(Packet *p_in)
 	{
 		char buffer [25];
 		int n;
-		n = sprintf (buffer, "iwconfig eth0 channel %d",lauch_hdr_ptr->channel);
-		n = system(buffer);
+		n=sprintf (buffer, "iwconfig eth0 channel %d",lauch_hdr_ptr->channel);
 
+		system(buffer);
 		_locked_channel = lauch_hdr_ptr->channel;
 		lauch_hdr_ptr->type = launch_ctrl_hdr::LAUNCH_LOCK_RES;
 		lauch_hdr_ptr->lock_response = 1;

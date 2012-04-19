@@ -60,5 +60,5 @@ LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip
 
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(LaunchLockRequester)
+EXPORT_ELEMENT(LAUNCHRequester)
 
