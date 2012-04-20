@@ -1,14 +1,16 @@
-#ifndef LAUNCH_RCVR_LOCK_HH
-#define LAUNCH_RCVR_LOCK_HH
+#ifndef Launch_Router_HH
+#define Launch_Router_HH
 #include <click/element.hh>
 #include <click/glue.hh>
 #include <click/ipaddress.hh>
 #include <click/etheraddress.hh>
 #include <clicknet/ether.h>
 #include <elements/local/launch.hh>
-#include <elements/local/launchctrlrequester.hh>
+#include <elements/local/launchrequester.hh>
 #include <elements/local/launchlockrequester.hh>
 #include <click/confparse.hh>
+#include <click/timer.hh>
+#include <click/hashmap.hh>
 CLICK_DECLS
 
 class LaunchRouter : public Element { public:
@@ -26,13 +28,11 @@ class LaunchRouter : public Element { public:
 	Packet *simple_action(Packet *);
 
 	void insert_route( const IPAddress &nip,uint32_t nlat, uint32_t nlong,const EtherAddress &ne,uint8_t chl, uint32_t pub, uint32_t swt);
-	double calculate_metric(RouteEntry r);
-	RouteEntry choose_bestneighbor();
+
+	
+	
 	
 	void set_channel_loc_positive();
-	RTable _rtes;
-
-
 
 private:
 	WritablePacket * _holded_packet;
@@ -122,9 +122,39 @@ private:
 		~RouteEntry() {}
 	};
 
+
+	class LocationEntry {
+
+	public:
+		class IPAddress  neighbor_ip;      // IP address of this destination
+
+		uint32_t neighbor_lat;			// Sender's Latitude.
+		uint32_t neighbor_long;			// Sender's Longitude.
+
+		class EtherAddress   neighbor_eth; // hardware address of next hop
+
+		LocationEntry(const IPAddress &nip,
+			  uint32_t nlat, uint32_t nlong) :
+		  neighbor_ip(nip), neighbor_lat(nlat), neighbor_long(nlong)
+		{}
+
+		LocationEntry() {}
+		~LocationEntry() {}
+	};
+
 	typedef HashMap<IPAddress, RouteEntry> RTable;
 	typedef RTable::const_iterator RTIter;
 
+
+	typedef HashMap<IPAddress, LocationEntry> LocationTable;
+	typedef LocationTable::const_iterator LTIter;
+
+	RouteEntry choose_bestneighbor();
+
+	RTable _rtes;
+	LocationTable _ltable;
+
+	double calculate_metric(RouteEntry r);
 };
 CLICK_ENDDECLS
 #endif

@@ -29,18 +29,21 @@ RoutingQueue
 
 LCR :: LaunchCtrlResponder(0,0,1,0.1,0.2,0.3);
 LLR :: LaunchLockResponder(wlan0, 50, 0.1, 0.2,0.3);
+LCRH :: LaunchCtrlResponseHandler(LR);
+LLRH :: LaunchLockResponseHandler(LR);
+
 
 Feth0 -> c2 :: Classifier(14/0100%ff00, 14/0200%ff00, 14/0300%ff00, 14/0400%ff00, 14/0500%ff00, -);
 
 c2[0] -> LCR -> eth0Queue;
 
-c2[1] -> 
+c2[1] -> LLRH -> eth0Queue;
 
-c2[2] -> 
+c2[2] -> LLRH -> eth0Queue;
 
 c2[3] -> LLR -> eth0Queue;
 
-c2[4] -> 
+c2[4] -> LCRH -> eth0Queue;
 
 CtrlRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
 LockRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
@@ -50,6 +53,6 @@ eth0Queue -> ARPQuerier(11.0.0.1 5c:26:0a:03:f2:f6) -> Teth0;
 // 1. Lock Respoder doesn't switch the channel (done)
 // 2. Router doesn't handle multiple destinations (done)
 // 3. Router doesn't handle if next hop is the destination (done)
-// 4. Update responder is not implemented
-// 5. Router doesn't have destintation location
+// 4. Update responder is not implemented (done)
+// 5. Router doesn't have destintation location (done)
 // 6.

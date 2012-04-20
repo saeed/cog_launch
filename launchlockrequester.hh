@@ -2,7 +2,7 @@
 #define CLICK_LAUNCHLOCREQUESTER_HH
 #include <click/element.hh>
 #include <click/glue.hh>
-#include <elements/launch/launch.hh>
+#include <elements/local/launch.hh>
 CLICK_DECLS
 
 /*

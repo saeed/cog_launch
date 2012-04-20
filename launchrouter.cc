@@ -17,6 +17,22 @@ CLICK_DECLS
 LaunchRouter::LaunchRouter()
 : _respone_waiting_timer(static_use_responses, this), _lock_waiting_timer(static_use_lock, this), _routing_table_entry_timer(static_make_routetable_expire, this)
 {
+	IPAddress n1 ("10.0.0.1");
+	LocationEntry n1_l(n1, 1, 1);
+	_ltable.insert(n1, n1_l);
+	
+	IPAddress n2 ("10.0.0.2");
+	LocationEntry n2_l(n1, 2, 2);
+	_ltable.insert(n2, n2_l);
+	
+	IPAddress n3 ("10.0.0.3");
+	LocationEntry n3_l(n1, 3, 3);
+	_ltable.insert(n3, n3_l);
+	
+	IPAddress n4 ("10.0.0.4");
+	LocationEntry n4_l(n1, 4, 4);
+	_ltable.insert(n4, n4_l);
+	
 }
 
 LaunchRouter::~LaunchRouter()
@@ -188,8 +204,12 @@ LaunchRouter::choose_bestneighbor(IPAddress _current_dst_addr)
 			best_ip = rte.neighbor_ip;
 			break;
 		}
-		const RTEntry &rte = iter.value();
-		current_metric = calculate_metric(rte);
+
+		RouteEntry rte = iter.value();
+
+		LocationEntry lentry =  _ltable.find(rte.neighbor_ip);
+
+		current_metric = calculate_metric(rte, lentry);
 		if(current_metric < last_metric)
 		{
 			last_metric = current_metric;
@@ -202,11 +222,11 @@ LaunchRouter::choose_bestneighbor(IPAddress _current_dst_addr)
 
 //Function to calculate the metric for certain neighbor in the table
 double 
-LaunchRouter::calculate_metric(RouteEntry r)
+LaunchRouter::calculate_metric(RouteEntry r, LocationEntry l)
 {
 
 
-	uint8_t distance = distance(((double)dst_lat/1000.00),((double)dst_long/1000.00),((double)r.neighbor_lat/1000.00), ((double)r.neighbor_long/1000.00),'M');
+	uint8_t distance = distance(((double)l.dst_lat/1000.00),((double)l.dst_long/1000.00),((double)r.neighbor_lat/1000.00), ((double)r.neighbor_long/1000.00),'M');
 
 	return ((distance/(3*(10^6)))  + r.switching_time)/(1- r.pu_behavior*_pu_behavior);
 }
