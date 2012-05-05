@@ -43,9 +43,9 @@ LaunchLockResponseHandler::simple_action(Packet *p_in)
 	else
 	{
 	
-	RouteEntry temp = _router_rtes.findp(nip);
-	
-	_router.insert_route(p_in.get_dst_ip_anno(),
+	RouteEntry temp = _router_rtes.findp(p_in._dst_ip_anno());
+
+	_router.insert_route(p_in._dst_ip_anno(),
 	      temp.neighbor_lat, temp.neighbor_long, 
 	       p_in.get_dst_eth_anno(), 	launch_hdr_ptr->channel,
 	       	launch_hdr_ptr->pu_behavior, temp.neighbor_long);
