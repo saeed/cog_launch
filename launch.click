@@ -37,13 +37,13 @@ Feth0 -> c2 :: Classifier(14/0100%ff00, 14/0200%ff00, 14/0300%ff00, 14/0400%ff00
 
 c2[0] -> LCR -> eth0Queue;
 
-c2[1] -> LLRH -> eth0Queue;
+c2[1] -> LCRH -> eth0Queue;
 
 c2[2] -> LLRH -> eth0Queue;
 
 c2[3] -> LLR -> eth0Queue;
 
-c2[4] -> LCRH -> eth0Queue;
+c2[4] -> LLRH -> eth0Queue;
 
 CtrlRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
 LockRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
