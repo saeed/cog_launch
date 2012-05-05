@@ -37,10 +37,16 @@ LaunchCtrlResponseHandler::simple_action(Packet *p_)
 {
   struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) p_->data();
   WritablePacket * p_in = p_->uniqueify();
+  
+  
+   click_ether *ethh = reinterpret_cast<click_ether *>(p_in->data());
+    uint8_t source_address[6];
+    memcpy(source_address, ethh->ether_shost, 6);
+    
   //Packet should come here annotated with neighbor IP and ethernet address
   _router->insert_route(p_in->dst_ip_anno(),
 	      format->my_lat, format->my_long, 
-	       p_in->get_dst_eth_anno(), 	format->channel,
+	       source_address, 	format->channel,
 	       	format->pu_behavior, format->switching_time);
   
     return 0;
