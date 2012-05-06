@@ -22,6 +22,7 @@ int
 LaunchLockResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
+	.read_mp("IP", _ip)
       .read_mp("DEVNAME", _ifname)
       .read_mp("WAIT", _lock_timeout_ms)
 	  .read_mp("CH0", _pu_behavior0)
@@ -41,8 +42,8 @@ Packet *
 LaunchLockResponder::simple_action(Packet *p_in)
 {
 	WritablePacket *p = p_in->uniqueify();
-	struct launch_ctrl_hdr * lauch_hdr_ptr = (grid_hdr *) (p->data());
-	
+	struct launch_ctrl_hdr * lauch_hdr_ptr = (launch_ctrl_hdr *) (p->data());
+	launch_ctrl_hdr->neighbor_ip = _ip;
 	
 	//Need to be modified 
 	//Don't understand it
