@@ -20,8 +20,10 @@ LaunchCtrlResponder::~LaunchCtrlResponder()
 int
 LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 {
-	if (Args(conf, this, errh)
-      .read_mp("LONG", lch.my_long)
+
+ 	if (Args(conf, this, errh)
+ .read_mp("IP", lch.neighbor_ip)
+ .read_mp("LONG", lch.my_long)
       .read_mp("LAT", lch.my_lat)
 	  .read_mp("TSWTCH", lch.switching_time)
 	  .read_mp("CH0", _pu_behavior0)
