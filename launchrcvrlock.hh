@@ -42,7 +42,7 @@ class LaunchLockResponder : public Element { public:
 	uint32_t _pu_behavior2;
 	
 //This node's ip address	
-	IPAddress _ip
+	IPAddress _ip;
 	
 	
 
