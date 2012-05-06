@@ -35,11 +35,14 @@ LaunchCtrlResponseHandler::configure(Vector<String> &conf, ErrorHandler * errh)
 Packet *
 LaunchCtrlResponseHandler::simple_action(Packet *p_)
 {
-  struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) p_->data();
+ 
   WritablePacket * p_in = p_->uniqueify();
+ 
+ struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) p_in->data();
   
   
-   click_ether *ethh = reinterpret_cast<click_ether *>(p_in->data());
+  click_ether *ethh = p_in->ether_header()
+    
     uint8_t source_address[6];
     memcpy(source_address, ethh->ether_shost, 6);
     
