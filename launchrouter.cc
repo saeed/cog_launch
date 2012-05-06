@@ -195,6 +195,9 @@ RouteEntry
 LaunchRouter::choose_bestneighbor(IPAddress _current_dst_addr)
 {
 
+	if(_rtes.findp(_current_dst_addr) != 0)
+	return _rtes.findp(_current_dst_addr);
+	
 	double last_metric = 10000;
 	uint8_t best_ip ;
 	double current_metric;
