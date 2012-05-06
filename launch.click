@@ -48,7 +48,7 @@ c2[4] -> LLRH -> eth0Queue;
 CtrlRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
 LockRequester -> EtherEncap(0x0700, 1:1:1:1:1:1, 2:2:2:2:2:2) -> eth0Queue;
 
-eth0Queue -> ARPQuerier(11.0.0.1 5c:26:0a:03:f2:f6) -> Teth0;
+eth0Queue -> ARPQuerier(11.0.0.1, 5c:26:0a:03:f2:f6) -> Teth0;
 // what's missing 
 // 1. Lock Respoder doesn't switch the channel (done)
 // 2. Router doesn't handle multiple destinations (done)
