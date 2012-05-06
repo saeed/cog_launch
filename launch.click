@@ -16,7 +16,7 @@ tap :: KernelTap(1.0.0.1/8, ETHER 1:1:1:1:1:1);
 Fwlan1 -> c1 :: Classifier(12/0800, 12/0806);
 
 //handle ARP
-c1[1] -> ARPResponder(10.0.0.1 00:27:10:a0:f6:b4) -> Twlan0;
+c1[1] -> ARPResponder(10.0.0.1, 00:27:10:a0:f6:b4) -> Twlan0;
 
 c1[0] -> RoutingQueue;  
 tap -> RoutingQueue;
