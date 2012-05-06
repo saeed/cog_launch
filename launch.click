@@ -24,7 +24,7 @@ tap -> RoutingQueue;
 RoutingQueue
 	-> GetIPAddress(30) 
 	-> LR:: LaunchRouter(0.1, 50, 50, 2, CtrlRequester, LockRequester) 
-	-> ARPQuerier(10.0.0.1 00:27:10:a0:f6:b4)
+	-> ARPQuerier(10.0.0.1, 00:27:10:a0:f6:b4)
 	-> Twlan0;
 
 LCR :: LaunchCtrlResponder(0,0,1,0.1,0.2,0.3);
