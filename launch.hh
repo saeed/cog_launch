@@ -2,7 +2,7 @@
 #define LAUNCH_HH
 #include <click/glue.hh>
 #include <click/string.hh>
-
+#include <click/ipaddress.hh>
 
 
 struct launch_ctrl_hdr
@@ -24,6 +24,8 @@ struct launch_ctrl_hdr
 	uint32_t switching_time;
 
 	uint8_t lock_response;
+	  IPAddress neighbor_ip;		/* Neighbor response with its IP		     */
+  
 };
 
 
