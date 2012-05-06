@@ -47,7 +47,7 @@ LaunchCtrlResponseHandler::simple_action(Packet *p_)
     memcpy(source_address, ethh->ether_shost, 6);
     
   //Packet should come here annotated with neighbor IP and ethernet address
-  _router->insert_route(p_in->dst_ip_anno(),
+  _router->insert_route(format->neighbor_ip,
 	      format->my_lat, format->my_long, 
 	       source_address, 	format->channel,
 	       	format->pu_behavior, format->switching_time);
