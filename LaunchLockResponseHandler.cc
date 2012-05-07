@@ -23,6 +23,7 @@ int
 LaunchLockResponseHandler::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
+	 .read_mp("ETH", _eth)
       .read_mp("ROUTER", reinterpret_cast<Element *&>(_router))
       .complete() < 0)
       return -1;
@@ -42,16 +43,20 @@ LaunchLockResponseHandler::simple_action(Packet *p_in)
 	_router.set_channel_lock_positive();
 	else
 	{
-	
-	RouteEntry temp = _router_rtes.findp(p_in._dst_ip_anno());
 
-	_router.insert_route(p_in._dst_ip_anno(),
+	RouteEntry temp = _router_rtes.findp(launch_hdr_ptr->neighbor_ip);
+ 	click_ether *ethh = p_in->ether_header()
+    
+   	uint8_t source_address[6];
+    	memcpy(source_address, ethh->ether_shost, 6);
+
+	_router.insert_route(launch_hdr_ptr->neighbor_ip,
 	      temp.neighbor_lat, temp.neighbor_long, 
-	       p_in.get_dst_eth_anno(), 	launch_hdr_ptr->channel,
+	       source_address, launch_hdr_ptr->channel,
 	       	launch_hdr_ptr->pu_behavior, temp.neighbor_long);
 			
 			RouteEntry best_neighbor = _router.choose_bestneighbor();	
-		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/);
+		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/,_eth);
 		}
     return 0;
 }
