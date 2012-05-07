@@ -32,7 +32,7 @@ class LaunchLockResponseHandler : public Element { public:
 	//Pointer to LaunchRouter to insert response
 	LaunchRouter * _router;
 	LaunchLockRequester * _lock_requester;
-	
+	EtherAddress _eth;	
 	
 };
 CLICK_ENDDECLS
