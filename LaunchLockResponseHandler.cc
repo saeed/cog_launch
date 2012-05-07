@@ -57,7 +57,7 @@ LaunchLockResponseHandler::simple_action(Packet *p_in)
 			
 			RouteEntry best_neighbor = _router.choose_bestneighbor();	
 		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/,_eth);
-		}
+	}
     return 0;
 }
 
