@@ -43,7 +43,7 @@ int
 LaunchRouter::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
-      //.read_mp("ETH", _eth)
+      .read_mp("ETH", _eth)
       //.read_mp("IP", _ip)
 	  .read_mp("PU", _pu_behavior)
 	  .read_mp("RES_T", _repsonse_waiting_ms)
@@ -92,7 +92,7 @@ LaunchRouter::simple_action(Packet *p_in)
 	{
 		
 		RouteEntry best_neighbor = choose_bestneighbor(_dst_ip);	
-		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/);
+		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/,_eth/*my ethernet*/);
 		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
 	
 	}
