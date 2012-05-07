@@ -1,4 +1,3 @@
-
 #include <click/config.h>
 #include <elements/launch/launch.hh>
 #include <elements/launch/launchlockrequester.hh>
@@ -33,7 +32,7 @@ LaunchLockRequester::initialize(ErrorHandler *)
 
 // Function called from LaunchRouter to send lock request packets on certain channel to certain neighbor
 void
-LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip,EtherAddress distination_eth )
+LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip,EtherAddress distination_eth, EtherAddress source_eth )
 {
 	
 	int tailroom = 0;
@@ -53,9 +52,19 @@ LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip
 
 	memcpy(packet->data(), &_lh, sizeof(_lh));
 	
-	//annotate packet with distination for wrapper
+	//Push Ethernet header
+	 click_ether ethh;
+	 ethh.ether_shost = source_eth;
+	 ethh.ether_dhost = destination_eth;
+	 ethh.ether_type = 0x0700;
+	 
 	
-	output(0).push(packet);
+	WritablePacket *q = packet->push_mac_header(14))
+	memcpy(q->data(), &ethh, 14);
+	
+	
+	
+	output(0).push(q);
 }
 
 
