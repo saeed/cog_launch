@@ -118,7 +118,7 @@ LaunchRouter::use_responses()
 		//lookup table and calculate the metric to choose next hop
 		//issue lock request
 		RouteEntry best_neighbor = choose_bestneighbor(_dst_ip);	
-		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/);
+		_lock_requester.send_lock_request(best_neighbor.channel/*channel selected*/, best_neighbor.neighbor_ip/*lock distantion ip*/, best_neighbor.neighbor_eth/*lock distantion eth*/,_eth);
 		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
 	}
 	else
