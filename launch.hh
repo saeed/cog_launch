@@ -24,7 +24,7 @@ struct launch_ctrl_hdr
 	uint32_t switching_time;
 
 	uint8_t lock_response;
-	  IPAddress neighbor_ip;		/* Neighbor response with its IP		     */
+	IPAddress neighbor_ip;		/* Neighbor response with its IP		     */
   
 };
 

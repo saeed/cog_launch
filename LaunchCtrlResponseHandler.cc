@@ -38,14 +38,14 @@ LaunchCtrlResponseHandler::simple_action(Packet *p_)
  
   WritablePacket * p_in = p_->uniqueify();
  
- struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) p_in->data();
+ struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) (p_in->data()+14);
   
   
-  click_ether *ethh = p_in->ether_header()
+  click_ether *ethh = p_in->ether_header();
     
-    uint8_t source_address[6];
-    memcpy(source_address, ethh->ether_shost, 6);
-    
+	uint8_t source_address[6];
+	memcpy(source_address, ethh->ether_shost, 6);
+	  
   //Packet should come here annotated with neighbor IP and ethernet address
   _router->insert_route(format->neighbor_ip,
 	      format->my_lat, format->my_long, 

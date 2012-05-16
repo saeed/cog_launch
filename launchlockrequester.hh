@@ -26,8 +26,8 @@ class LaunchLockRequester : public Element { public:
   int initialize(ErrorHandler *);
 
   
-  void send_request();
-  
+  void send_lock_request(uint8_t channel, IPAddress distination_ip,uint8_t * distination_eth, uint8_t * source_eth );
+
 
  private:
 

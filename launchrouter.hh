@@ -11,6 +11,8 @@
 #include <click/confparse.hh>
 #include <click/timer.hh>
 #include <click/hashmap.hh>
+#include <list>		// list class library
+using namespace std;
 CLICK_DECLS
 
 class LaunchRouter : public Element { public:
@@ -20,30 +22,44 @@ class LaunchRouter : public Element { public:
 
 	const char *class_name() const		{ return "LaunchRouter"; }
 	const char *port_count() const		{ return PORTS_1_1; }
-	const char *processing() const		{ return "h/h"; }
+	const char *processing() const		{ return AGNOSTIC; }
 	
 	int configure(Vector<String> &, ErrorHandler *);
 	int initialize(ErrorHandler *);
 	
-	Packet *simple_action(Packet *);
+	Packet * simple_action(Packet *p_in);
 
-	void insert_route( const IPAddress &nip,uint32_t nlat, uint32_t nlong,const EtherAddress &ne,uint8_t chl, uint32_t pub, uint32_t swt);
-
+	void insert_route( const IPAddress &nip,uint32_t nlat, uint32_t nlong,uint8_t * ne,uint8_t chl, uint32_t pub, uint32_t swt);
+	void update_route(const IPAddress &nip, 	uint8_t chl);
 	
-	
+	void cant_use_channel(int channel_number);
 	
 	void set_channel_loc_positive();
+	void set_channel_loc_negative();
+
+	bool can_use_11;
+	bool can_use_6;
+	bool can_use_1;
 
 private:
+
+	list<Packet *> packets_holded;
+
 	WritablePacket * _holded_packet;
 	IPAddress _dst_ip;
 
 	IPAddress _ip;
-	EtherAddress _eth;
+	EtherAddress _ether_address_eth;
+	uint8_t _eth [6];
 
-	uint32_t _pu_behavior;
+	//uint32_t _pu_behavior;
+
+
+	double _pu_behavior;
 
 	bool _channel_lock_positive;
+	class IPAddress locked_neighbor_ip;
+
 	bool _routingtable_available;
 
 	bool _ready_for_another_packet;
@@ -102,7 +118,7 @@ private:
 		uint32_t neighbor_lat;			// Sender's Latitude.
 		uint32_t neighbor_long;			// Sender's Longitude.
 
-		class EtherAddress   neighbor_eth; // hardware address of next hop
+		uint8_t   neighbor_eth[6]; // hardware address of next hop
 
 		uint8_t channel;
 		uint32_t pu_behavior;
@@ -112,11 +128,11 @@ private:
 
 		RouteEntry(const IPAddress &nip,
 			  uint32_t nlat, uint32_t nlong, 
-			   const EtherAddress &ne, 	uint8_t chl,
+			   uint8_t * ne, 	uint8_t chl,
 			   	uint32_t pub, 	uint32_t swt) :
 		  neighbor_ip(nip), neighbor_lat(nlat), neighbor_long(nlong), 
-		  neighbor_eth(ne), channel(chl), switching_time(swt)
-		{}
+		  channel(chl), switching_time(swt)
+		{memcpy(neighbor_eth,ne,6);}
 
 		RouteEntry() {}
 		~RouteEntry() {}
@@ -130,7 +146,6 @@ private:
 
 		uint32_t neighbor_lat;			// Sender's Latitude.
 		uint32_t neighbor_long;			// Sender's Longitude.
-
 		class EtherAddress   neighbor_eth; // hardware address of next hop
 
 		LocationEntry(const IPAddress &nip,
@@ -149,12 +164,60 @@ private:
 	typedef HashMap<IPAddress, LocationEntry> LocationTable;
 	typedef LocationTable::const_iterator LTIter;
 
-	RouteEntry choose_bestneighbor();
-
 	RTable _rtes;
 	LocationTable _ltable;
+	
+	double calculate_metric(RouteEntry r, LocationEntry l);
+	
+	RouteEntry * choose_bestneighbor(IPAddress _current_dst_addr,HashMap<IPAddress, RouteEntry>  _rtes)
+	{
 
-	double calculate_metric(RouteEntry r);
+
+		if(_rtes.findp(_current_dst_addr) != 0)
+		return _rtes.findp(_current_dst_addr);
+	
+		double last_metric = 10000;
+		IPAddress best_ip ;
+		double current_metric;
+
+		for (RTIter iter = _rtes.begin(); iter.live(); iter++) {
+			
+			RouteEntry rte = iter.value();
+			
+			LocationEntry lentry =  _ltable.find(rte.neighbor_ip);
+
+			current_metric = calculate_metric(rte, lentry);
+			
+			switch(rte.channel)
+			{
+				case 1:
+					if (!can_use_1)
+						continue;
+				break;
+				case 6:
+					if (!can_use_6)
+						continue;
+				break;
+				case 11:
+					if (!can_use_11)
+						continue;
+				break;
+			}
+
+
+			if(current_metric < last_metric)
+			{
+				last_metric = current_metric;
+				best_ip = rte.neighbor_ip;
+			}	
+		}
+		channel_used = _rtes.findp(best_ip)->channel;
+		return _rtes.findp(best_ip);
+	};
+
+
+	uint8_t channel_used ;
+	
 };
 CLICK_ENDDECLS
 #endif

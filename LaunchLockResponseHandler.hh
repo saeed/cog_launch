@@ -9,6 +9,7 @@
 #include <elements/local/launchrouter.hh>
 #include <elements/local/launchlockrequester.hh>
 #include <click/confparse.hh>
+#include <elements/userlevel/todevice.hh>
 CLICK_DECLS
 
 class LaunchLockResponseHandler : public Element { public:
@@ -27,10 +28,12 @@ class LaunchLockResponseHandler : public Element { public:
 
 	private:
 
-	
+	String _ifname;
+	IPAddress _ip;
 	
 	//Pointer to LaunchRouter to insert response
 	LaunchRouter * _router;
+	ToDevice * _to_dev;
 	LaunchLockRequester * _lock_requester;
 	EtherAddress _eth;	
 	

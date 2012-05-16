@@ -1,6 +1,6 @@
 #include <click/config.h>
-#include <elements/launch/launch.hh>
-#include <elements/launch/launchctrlrequester.hh>
+#include <elements/local/launch.hh>
+#include <elements/local/launchrequester.hh>
 #include <click/args.hh>
 #include <click/error.hh>
 #include <click/glue.hh>
@@ -40,19 +40,27 @@ LaunchCtrlRequester::send_request()
 	int headroom = 0;
 	
 	
-	WritablePacket *packet = Packet::make(headroom,0,packetsize, tailroom);
+//	WritablePacket *packet = Packet::make(headroom,0,packetsize, tailroom);
+	
+	_lh.type = launch_ctrl_hdr::LAUNCH_REQ;
+	
+	WritablePacket *packet = Packet::make((void *)&_lh, sizeof(_lh));
+	
 	if (packet == 0 )
 		return click_chatter( "cannot make packet!");
 	
-	memset(packet->data(), 0, packet->length());
-	struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) packet->data();
-	
-	format->type = launch_ctrl_hdr::LAUNCH_REQ;
-	format->channel = channel;
+	//memset(packet->data(), 0, packet->length());
 
-	memcpy(packet->data(), &_lh, sizeof(_lh));
 
+	//struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) packet->data();
+	//format->type = launch_ctrl_hdr::LAUNCH_REQ;
+
+	//format->channel = channel;
+
+	//memcpy(packet->data(), &_lh, sizeof(_lh));
+	//click_chatter( "made everything");
 	output(0).push(packet);
+	//click_chatter( "made the push");
 }
 
 
