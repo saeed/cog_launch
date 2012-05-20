@@ -52,9 +52,6 @@ private:
 	EtherAddress _ether_address_eth;
 	uint8_t _eth [6];
 
-	//uint32_t _pu_behavior;
-
-
 	double _pu_behavior;
 
 	bool _channel_lock_positive;
