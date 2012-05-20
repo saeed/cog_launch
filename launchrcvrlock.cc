@@ -65,7 +65,7 @@ LaunchLockResponder::simple_action(Packet *p_in)
 		n = system(buffer);
 		n = sprintf (buffer, "sudo ifconfig %s up",_ifname.c_str());
 		n = system(buffer);
-		n = sprintf (buffer, "sudo iwconfig %s essid click_ww%d channel %d key off mode Ad-Hoc",_ifname.c_str(),lauch_hdr_ptr->channel,lauch_hdr_ptr->channel);
+		n = sprintf (buffer, "sudo iwconfig %s essid b7awel channel %d key off mode Ad-Hoc",_ifname.c_str(),lauch_hdr_ptr->channel);//,lauch_hdr_ptr->channel);
 		n = system(buffer);
 		//n = sprintf (buffer, "sudo iwconfig %s essid click_ww%d channel %d",_ifname.c_str(),lauch_hdr_ptr->channel,lauch_hdr_ptr->channel);
 		//n = system(buffer);

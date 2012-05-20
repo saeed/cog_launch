@@ -78,11 +78,13 @@ LaunchRouter::initialize(ErrorHandler *)
 Packet *
 LaunchRouter::simple_action(Packet *p_in)
 {
+	
 	//look up next hop for packet (route table has entries) and there is a positive channel lock
 	//if exists annotate packet and push to next element
 	//if not start response timer and broadcast lanch request
 	if(_ready_for_another_packet)
 	{
+		click_chatter("i found it ready :)");
 		_holded_packet = p_in->uniqueify();
 		packets_holded.push_back(_holded_packet);
 		//get dst ip from packet's annotations for later use	
@@ -119,6 +121,7 @@ LaunchRouter::simple_action(Packet *p_in)
 		}
 		else
 		{
+			click_chatter("send request and make it not ready");
 			_requester->send_request();
 			_respone_waiting_timer.schedule_after_msec(_repsonse_waiting_ms);
 			_ready_for_another_packet = false;
@@ -126,8 +129,13 @@ LaunchRouter::simple_action(Packet *p_in)
 		}
 	}
 	else
-	{
+	{	
+		click_chatter("i found it not ready");
+				
 		_holded_packet = p_in->uniqueify();
+		click_chatter("%d",sizeof(_holded_packet->data()) );
+		click_chatter("%x",_holded_packet->data() );
+		
 		packets_holded.push_back(_holded_packet);
 		return 0;
 	}
@@ -139,9 +147,10 @@ LaunchRouter::simple_action(Packet *p_in)
 void 
 LaunchRouter::use_responses()
 {
-	//click_chatter("333333333333333333333333333333333333333#############################33333333333333333333333333333333333");
+	
 	if(_routingtable_available)
 	{
+		click_chatter("routing table became available");
 		//lookup table and calculate the metric to choose next hop
 		//issue lock request
 		RouteEntry * best_neighbor = choose_bestneighbor(_dst_ip,_rtes);	
@@ -174,23 +183,27 @@ LaunchRouter::use_lock()
 	//if negative wait again
 	if(_channel_lock_positive && _routingtable_available)
 	{
-				
+		click_chatter("routing table available and lock received -> packet sent");		
 		//annotate packet with distenation and output packet
 		_holded_packet->set_dst_ip_anno(locked_neighbor_ip/*from calculating the metric*/);
 		output(0).push(_holded_packet);
 		packets_holded.pop_front();
 
 
-		while (packets_holded.size() > 0)
+		while (packets_holded.size() > 1)
 		{
+
 			Packet * value = packets_holded.front();
 			RouteEntry * current_best_neighbor = choose_bestneighbor(value->dst_ip_anno(),_rtes);
 			IPAddress current_neighbor_ip  = current_best_neighbor->neighbor_ip;
 			if(current_neighbor_ip == locked_neighbor_ip)
 			{
+				click_chatter("%d",sizeof(value->data()) );
+				click_chatter("%x",value->data() );
 				value->set_dst_ip_anno(locked_neighbor_ip /*from calculating the metric*/);
 				output(0).push(value);
 				packets_holded.pop_front();
+				click_chatter("trying to send holded packets");
 			}
 			else
 			{

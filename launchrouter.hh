@@ -45,7 +45,7 @@ private:
 
 	list<Packet *> packets_holded;
 
-	WritablePacket * _holded_packet;
+	Packet * _holded_packet;
 	IPAddress _dst_ip;
 
 	IPAddress _ip;
