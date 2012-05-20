@@ -25,7 +25,7 @@ LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 		.read_mp("ETH", _my_eth)
 		.read_mp("IP", lch.neighbor_ip)
 		.read_mp("LONG", lch.my_long)
-      	.read_mp("LAT", lch.my_lat)
+      		.read_mp("LAT", lch.my_lat)
 		.read_mp("TSWTCH", lch.switching_time)
 		.read_mp("CH0", _pu_behavior0)
 		.read_mp("CH1", _pu_behavior1)
@@ -60,18 +60,16 @@ LaunchCtrlResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 Packet *
 LaunchCtrlResponder::simple_action(Packet *p_in)
 {
-  //int extra = sizeof(lch);
-  //WritablePacket *p = p_in->push(extra);
   WritablePacket *p = p_in->uniqueify();
   
   if (!p)
-    return 0;
+  return 0;
 
-  click_ether *ethh = p->ether_header();
-  uint8_t source_address[6];
-  memcpy(source_address, ethh->ether_shost, 6);
-  memcpy(ethh->ether_dhost, source_address, 6);
-  memcpy(ethh->ether_shost, _my_eth.data(), 6);
+	  click_ether *ethh = p->ether_header();
+	  uint8_t source_address[6];
+	  memcpy(source_address, ethh->ether_shost, 6);
+	  memcpy(ethh->ether_dhost, source_address, 6);
+	  memcpy(ethh->ether_shost, _my_eth.data(), 6);
 
   memcpy(p->data()+14, &lch, sizeof(lch));
 
