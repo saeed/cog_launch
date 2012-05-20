@@ -33,9 +33,8 @@ class LaunchLockResponseHandler : public Element { public:
 	
 	//Pointer to LaunchRouter to insert response
 	LaunchRouter * _router;
-	ToDevice * _to_dev;
-	LaunchLockRequester * _lock_requester;
-	EtherAddress _eth;	
+	//Pointer to initialize ToDevice Element
+	ToDevice * _to_dev;	
 	
 };
 CLICK_ENDDECLS
