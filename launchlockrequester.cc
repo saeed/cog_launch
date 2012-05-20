@@ -37,18 +37,14 @@ LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip
 {
 	
 	WritablePacket *packet = Packet::make((void *)&_lh, sizeof(_lh));
+	
 	if (packet == 0 )
-		return click_chatter( "cannot make packet!");
+	return click_chatter( "cannot make packet!");
 	
-	
-
 	struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) packet->data();
-	
 	
 	format->type = launch_ctrl_hdr::LAUNCH_LOCK_REQ;
 	format->channel = channel;
-
-	//memcpy(packet->data(), &_lh, sizeof(_lh));
 	
 	//Push Ethernet header
 	 struct click_ether ethh;
@@ -56,7 +52,6 @@ LaunchLockRequester::send_lock_request(uint8_t channel, IPAddress distination_ip
 	 memcpy(ethh.ether_dhost, destination_eth, sizeof(ethh.ether_dhost));
 	 ethh.ether_type = 0x0700;
 	 
-	
 	WritablePacket *q = packet->push(14);
 	memcpy(q->data(), &ethh, 14);
 	
