@@ -51,7 +51,7 @@ int
 LaunchRouter::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
-      .read_mp("ETH", _ether_address_eth)
+	  .read_mp("ETH", _ether_address_eth)
 	  .read_mp("PU", _pu_behavior)
 	  .read_mp("RES_T", _repsonse_waiting_ms)
 	  .read_mp("LOCK_T", _lock_waiting_ms)
@@ -84,7 +84,6 @@ LaunchRouter::simple_action(Packet *p_in)
 	//if not start response timer and broadcast lanch request
 	if(_ready_for_another_packet)
 	{
-		click_chatter("i found it ready :)");
 		_holded_packet = p_in->uniqueify();
 		packets_holded.push_back(_holded_packet);
 		//get dst ip from packet's annotations for later use	
@@ -121,7 +120,6 @@ LaunchRouter::simple_action(Packet *p_in)
 		}
 		else
 		{
-			click_chatter("send request and make it not ready");
 			_requester->send_request();
 			_respone_waiting_timer.schedule_after_msec(_repsonse_waiting_ms);
 			_ready_for_another_packet = false;
@@ -130,12 +128,8 @@ LaunchRouter::simple_action(Packet *p_in)
 	}
 	else
 	{	
-		click_chatter("i found it not ready");
 				
 		_holded_packet = p_in->uniqueify();
-		click_chatter("%d",sizeof(_holded_packet->data()) );
-		click_chatter("%x",_holded_packet->data() );
-		
 		packets_holded.push_back(_holded_packet);
 		return 0;
 	}
@@ -150,19 +144,11 @@ LaunchRouter::use_responses()
 	
 	if(_routingtable_available)
 	{
-		click_chatter("routing table became available");
 		//lookup table and calculate the metric to choose next hop
 		//issue lock request
 		RouteEntry * best_neighbor = choose_bestneighbor(_dst_ip,_rtes);	
 		locked_neighbor_ip = best_neighbor->neighbor_ip;
-
-		//click_chatter("howa da el best neighbor");
-		//EtherAddress tempo(best_neighbor->neighbor_eth);
-
-		//click_chatter(tempo.unparse().c_str());
-		//click_chatter(best_neighbor->neighbor_ip.unparse().c_str());
-
-			
+		
 		_lock_requester->send_lock_request(best_neighbor->channel/*channel selected*/, best_neighbor->neighbor_ip/*lock distantion ip*/, best_neighbor->neighbor_eth/*lock distantion eth*/,_eth);
 		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
 		
@@ -183,7 +169,6 @@ LaunchRouter::use_lock()
 	//if negative wait again
 	if(_channel_lock_positive && _routingtable_available)
 	{
-		click_chatter("routing table available and lock received -> packet sent");		
 		//annotate packet with distenation and output packet
 		_holded_packet->set_dst_ip_anno(locked_neighbor_ip/*from calculating the metric*/);
 		output(0).push(_holded_packet);
@@ -198,12 +183,9 @@ LaunchRouter::use_lock()
 			IPAddress current_neighbor_ip  = current_best_neighbor->neighbor_ip;
 			if(current_neighbor_ip == locked_neighbor_ip)
 			{
-				click_chatter("%d",sizeof(value->data()) );
-				click_chatter("%x",value->data() );
 				value->set_dst_ip_anno(locked_neighbor_ip /*from calculating the metric*/);
 				output(0).push(value);
 				packets_holded.pop_front();
-				click_chatter("trying to send holded packets");
 			}
 			else
 			{
@@ -278,40 +260,6 @@ LaunchRouter::update_route(const IPAddress &nip, 	uint8_t chl)
 
 
 
-/*
-// Function to pick the best neighbor in terms of the launch metric
-RouteEntry 
-LaunchRouter::choose_bestneighbor(IPAddress _current_dst_addr)
-{
-
-	if(_rtes.findp(_current_dst_addr) != 0)
-	return _rtes.findp(_current_dst_addr);
-	
-	double last_metric = 10000;
-	uint8_t best_ip ;
-	double current_metric;
-	for (RTIter iter = _rtes.begin(); iter.live(); iter++) {
-		if(_current_dst_addr == iter.neighbor_ip)
-		{
-			best_ip = rte.neighbor_ip;
-			break;
-		}
-
-		RouteEntry rte = iter.value();
-
-		LocationEntry lentry =  _ltable.find(rte.neighbor_ip);
-
-		current_metric = calculate_metric(rte, lentry);
-		if(current_metric < last_metric)
-		{
-			last_metric = current_metric;
-			best_ip = rte.neighbor_ip;
-		}	
-	}
-
-	return _rtes.findp(best_ip);
-}
-*/
 //Function to calculate the metric for certain neighbor in the table
 double 
 LaunchRouter::calculate_metric(RouteEntry r, LocationEntry l)
