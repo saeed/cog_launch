@@ -27,11 +27,12 @@ LaunchLockResponder::configure(Vector<String> &conf, ErrorHandler * errh)
 	if (Args(conf, this, errh)
 		.read_mp("IP", _ip)
 		.read_mp("DEVNAME", _ifname)
+		.read_mp("ETH", _my_eth)
 		.read_mp("WAIT", _lock_timeout_ms)
 		.read_mp("CH0", _pu_behavior0)
 		.read_mp("CH1", _pu_behavior1)
 		.read_mp("CH2", _pu_behavior2)
-		.read_mp("ETH", _my_eth)
+		.read_mp("FROM_DEV", reinterpret_cast<Element *&>(_from_dev))
 		.read_mp("ROUTER", reinterpret_cast<Element *&>(_router))
 		.complete() < 0)
       return -1;
@@ -59,17 +60,17 @@ LaunchLockResponder::simple_action(Packet *p_in)
 		char buffer [3000];
 		int n;
 		//click_chatter("sudo iwconfig %s channel %d",_ifname.c_str(),lauch_hdr_ptr->channel);
+		
 		n = sprintf (buffer, "sudo ifconfig %s down",_ifname.c_str());
 		n = system(buffer);
-		n = sprintf (buffer, "sudo ifconfig %s %s netmask 255.255.255.0 broadcast 10.0.0.255",_ifname.c_str(),_ip.unparse().c_str());
+		n = sprintf (buffer, "sudo iwconfig %s essid teetteet%d channel %d key off mode Ad-Hoc",_ifname.c_str(),lauch_hdr_ptr->channel, lauch_hdr_ptr->channel);
+		n = system(buffer);
+		n = sprintf (buffer, "sudo ifconfig %s %s netmask 255.255.255.0 broadcast 10.0.0.255 promisc",_ifname.c_str(),_ip.unparse().c_str());
 		n = system(buffer);
 		n = sprintf (buffer, "sudo ifconfig %s up",_ifname.c_str());
 		n = system(buffer);
-		n = sprintf (buffer, "sudo iwconfig %s essid b7awel channel %d key off mode Ad-Hoc",_ifname.c_str(),lauch_hdr_ptr->channel);//,lauch_hdr_ptr->channel);
-		n = system(buffer);
-		//n = sprintf (buffer, "sudo iwconfig %s essid click_ww%d channel %d",_ifname.c_str(),lauch_hdr_ptr->channel,lauch_hdr_ptr->channel);
-		//n = system(buffer);
-
+		ErrorHandler  teet;
+		_from_dev->initialize(&teet);
 
 		_locked_channel = lauch_hdr_ptr->channel;
 		lauch_hdr_ptr->type = launch_ctrl_hdr::LAUNCH_LOCK_RES;

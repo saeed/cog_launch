@@ -48,6 +48,7 @@ private:
 	Packet * _holded_packet;
 	IPAddress _dst_ip;
 
+	//IPAddress ip("10.0.0.5"); 	
 	IPAddress _ip;
 	EtherAddress _ether_address_eth;
 	uint8_t _eth [6];

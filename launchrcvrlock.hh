@@ -9,6 +9,7 @@
 #include <click/confparse.hh>
 #include <click/timer.hh>
 #include <elements/local/launchrouter.hh>
+#include <elements/userlevel/fromdevice.hh>
 CLICK_DECLS
 
 class LaunchLockResponder : public Element { public:
@@ -26,6 +27,7 @@ class LaunchLockResponder : public Element { public:
 	Packet *simple_action(Packet *);
 	
 	LaunchRouter * _router;
+
 	EtherAddress _my_eth;
 
 	private:
@@ -39,7 +41,7 @@ class LaunchLockResponder : public Element { public:
 	uint32_t _lock_timeout_ms;
 //Timer of the lock	
 	Timer _lock_timeout_timer;
-
+	FromDevice * _from_dev;
 
 //PU behavior of the three candidates channels
 	/*uint32_t _pu_behavior0;
