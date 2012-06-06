@@ -53,15 +53,14 @@ LaunchLockResponder::simple_action(Packet *p_in)
 
 	lauch_hdr_ptr->neighbor_ip = _ip;
 	
+	//Need to be modified 
+	//Don't understand it
 	if(_lock_count ==0)
 	{
 		char buffer [3000];
 		int n;
-<<<<<<< HEAD
 		//click_chatter("sudo iwconfig %s channel %d",_ifname.c_str(),lauch_hdr_ptr->channel);
 		
-=======
->>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 		n = sprintf (buffer, "sudo ifconfig %s down",_ifname.c_str());
 		n = system(buffer);
 		n = sprintf (buffer, "sudo iwconfig %s essid teetteet%d channel %d key off mode Ad-Hoc",_ifname.c_str(),lauch_hdr_ptr->channel, lauch_hdr_ptr->channel);
@@ -70,12 +69,8 @@ LaunchLockResponder::simple_action(Packet *p_in)
 		n = system(buffer);
 		n = sprintf (buffer, "sudo ifconfig %s up",_ifname.c_str());
 		n = system(buffer);
-<<<<<<< HEAD
 		ErrorHandler  teet;
 		_from_dev->initialize(&teet);
-=======
-
->>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 
 		_locked_channel = lauch_hdr_ptr->channel;
 		lauch_hdr_ptr->type = launch_ctrl_hdr::LAUNCH_LOCK_RES;
@@ -151,19 +146,25 @@ int
 LaunchLockResponder::pu_sensed(const String &s, Element *e, void *, ErrorHandler *errh)
 {
     LaunchLockResponder *llr = static_cast<LaunchLockResponder *>(e);
-    uint32_t channel_sensed = atoi(s.c_str());
-    
-    //this machine can no longer use the sensed channel
-    llr->_router->cant_use_channel(channel_sensed);
-    
-    if(llr->_locked_channel == channel_sensed)
-    {
-    	llr->_locked_channel = 0;
-    	llr->_lock_count = 0;
-    	
-    }
-    
-    	//neighbors shouldn't communicate with this machine on the sensed channel
+	
+	uint32_t channel_sensed = atoi(s.c_str());
+
+    click_chatter("sensed channel %d ya ged3aaaaaaaaaaaaaaaaan", channel_sensed);
+	
+	//this machine can no longer use the sensed channel
+	llr->_router->cant_use_channel(channel_sensed);
+
+
+	if(llr->_locked_channel == channel_sensed)
+	{	
+		llr->_locked_channel = 0;
+		llr->_lock_count = 0;
+	}
+	
+
+
+	
+	//neighbors shouldn't communicate with this machine on the sensed channel
 	//send LOCK_RES to update the state of the lock
 	struct launch_ctrl_hdr  _lh;
 

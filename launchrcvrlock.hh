@@ -44,13 +44,16 @@ class LaunchLockResponder : public Element { public:
 	FromDevice * _from_dev;
 
 //PU behavior of the three candidates channels
+	/*uint32_t _pu_behavior0;
+	uint32_t _pu_behavior1;
+	uint32_t _pu_behavior2;*/
 	double _pu_behavior0;
 	double _pu_behavior1;
 	double _pu_behavior2;
 
 //This node's ip address	
 	IPAddress _ip;
-// PU Handler
+
 	static int pu_sensed(const String &s, Element *e, void *, ErrorHandler *errh);
 	
 

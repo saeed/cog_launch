@@ -30,7 +30,8 @@ class LaunchLockRequester : public Element { public:
 
 
  private:
- launch_ctrl_hdr _lh;
+
+	launch_ctrl_hdr _lh;
 
 };
 

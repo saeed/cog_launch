@@ -51,7 +51,7 @@ int
 LaunchRouter::configure(Vector<String> &conf, ErrorHandler * errh)
 {
 	if (Args(conf, this, errh)
-	  .read_mp("ETH", _ether_address_eth)
+      .read_mp("ETH", _ether_address_eth)
 	  .read_mp("PU", _pu_behavior)
 	  .read_mp("RES_T", _repsonse_waiting_ms)
 	  .read_mp("LOCK_T", _lock_waiting_ms)
@@ -83,11 +83,6 @@ LaunchRouter::simple_action(Packet *p_in)
 	//the the packet is directly processed 
 	if(_ready_for_another_packet)
 	{
-<<<<<<< HEAD
-=======
-		_holded_packet = p_in->uniqueify();
-		packets_holded.push_back(_holded_packet);
->>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 		//get dst ip from packet's annotations for later use	
 		_dst_ip = _holded_packet->dst_ip_anno();
 		
@@ -135,11 +130,6 @@ LaunchRouter::simple_action(Packet *p_in)
 	}
 	else
 	{	
-<<<<<<< HEAD
-=======
-				
-		_holded_packet = p_in->uniqueify();
->>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 		packets_holded.push_back(_holded_packet);
 	}
 	return 0;
@@ -160,11 +150,7 @@ LaunchRouter::use_responses()
 		//issue lock request
 		RouteEntry * best_neighbor = choose_bestneighbor(_dst_ip,_rtes);	
 		locked_neighbor_ip = best_neighbor->neighbor_ip;
-<<<<<<< HEAD
 			
-=======
-		
->>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 		_lock_requester->send_lock_request(best_neighbor->channel/*channel selected*/, best_neighbor->neighbor_ip/*lock distantion ip*/, best_neighbor->neighbor_eth/*lock distantion eth*/,_eth);
 		_lock_waiting_timer.schedule_after_msec(_lock_waiting_ms);
 	}
@@ -270,6 +256,40 @@ LaunchRouter::update_route(const IPAddress &nip, 	uint8_t chl)
 
 
 
+/*
+// Function to pick the best neighbor in terms of the launch metric
+RouteEntry 
+LaunchRouter::choose_bestneighbor(IPAddress _current_dst_addr)
+{
+
+	if(_rtes.findp(_current_dst_addr) != 0)
+	return _rtes.findp(_current_dst_addr);
+	
+	double last_metric = 10000;
+	uint8_t best_ip ;
+	double current_metric;
+	for (RTIter iter = _rtes.begin(); iter.live(); iter++) {
+		if(_current_dst_addr == iter.neighbor_ip)
+		{
+			best_ip = rte.neighbor_ip;
+			break;
+		}
+
+		RouteEntry rte = iter.value();
+
+		LocationEntry lentry =  _ltable.find(rte.neighbor_ip);
+
+		current_metric = calculate_metric(rte, lentry);
+		if(current_metric < last_metric)
+		{
+			last_metric = current_metric;
+			best_ip = rte.neighbor_ip;
+		}	
+	}
+
+	return _rtes.findp(best_ip);
+}
+*/
 //Function to calculate the metric for certain neighbor in the table
 double 
 LaunchRouter::calculate_metric(RouteEntry r, LocationEntry l)
