@@ -26,7 +26,11 @@ LaunchLockResponseHandler::configure(Vector<String> &conf, ErrorHandler * errh)
 	if (Args(conf, this, errh)
 	  .read_mp("IF", _ifname)
 	  .read_mp("IP", _ip)
+<<<<<<< HEAD
 	  .read_mp("ROUTER", reinterpret_cast<Element *&>(_router))
+=======
+      	  .read_mp("ROUTER", reinterpret_cast<Element *&>(_router))
+>>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 	  .read_mp("TO_DEV", reinterpret_cast<Element *&>(_to_dev))
       .complete() < 0)
       return -1;
@@ -41,7 +45,10 @@ Packet *
 LaunchLockResponseHandler::simple_action(Packet *p_in)
 {
 	struct launch_ctrl_hdr * launch_hdr_ptr = (struct launch_ctrl_hdr *) (p_in->data()+14);
+<<<<<<< HEAD
 	
+=======
+>>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 	if(launch_hdr_ptr->lock_response == 1)
 	{
 		char buffer [3000];
@@ -57,13 +64,22 @@ LaunchLockResponseHandler::simple_action(Packet *p_in)
 		n = system(buffer);
 		ErrorHandler  teet;
 		_to_dev->initialize(&teet);
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 		_router->set_channel_loc_positive();
 	}
 	else
 	{
 		_router->set_channel_loc_negative();
+<<<<<<< HEAD
 		_router->update_route(launch_hdr_ptr->neighbor_ip, launch_hdr_ptr->channel);		
+=======
+		_router->update_route(launch_hdr_ptr->neighbor_ip, launch_hdr_ptr->channel);
+			
+>>>>>>> b47a3ec77a1e82895c566f7d73f329e55a68ece2
 	}
     return 0;
 }

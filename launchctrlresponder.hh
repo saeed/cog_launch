@@ -30,9 +30,6 @@ class LaunchCtrlResponder : public Element { public:
     uint32_t _my_long;			// Sender's Longitude.
 	
 	// PU behavior of the three candidates channels
-	/*uint32_t _pu_behavior0;
-	uint32_t _pu_behavior1;
-	uint32_t _pu_behavior2;*/
 	double _pu_behavior0;
 	double _pu_behavior1;
 	double _pu_behavior2;

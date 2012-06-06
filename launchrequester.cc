@@ -34,14 +34,6 @@ LaunchCtrlRequester::initialize(ErrorHandler *)
 void
 LaunchCtrlRequester::send_request()
 {
-	
-	int tailroom = 0;
-	int packetsize = sizeof(_lh);
-	int headroom = 0;
-	
-	
-//	WritablePacket *packet = Packet::make(headroom,0,packetsize, tailroom);
-	
 	_lh.type = launch_ctrl_hdr::LAUNCH_REQ;
 	
 	WritablePacket *packet = Packet::make((void *)&_lh, sizeof(_lh));
@@ -49,18 +41,7 @@ LaunchCtrlRequester::send_request()
 	if (packet == 0 )
 		return click_chatter( "cannot make packet!");
 	
-	//memset(packet->data(), 0, packet->length());
-
-
-	//struct launch_ctrl_hdr * format = (struct launch_ctrl_hdr *) packet->data();
-	//format->type = launch_ctrl_hdr::LAUNCH_REQ;
-
-	//format->channel = channel;
-
-	//memcpy(packet->data(), &_lh, sizeof(_lh));
-	//click_chatter( "made everything");
 	output(0).push(packet);
-	//click_chatter( "made the push");
 }
 
 
